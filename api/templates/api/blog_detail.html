@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ blog_item.title }} :: DarkBlog
+{% endblock %}
+
+{% block sidebar %}
+{%  include 'inc/_sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-header">
+        Категория: <a href="{{ blog_item.category.get_absolute_url}}"> {{ blog_item.category }}</a>
+    </div>
+    <div class="card-body">
+            {% if blog_item.photo %}
+            <img src="{{ blog_item.photo.url }}" alt="" wight="350" height="300" class="float-left mr-3">
+            {% else %}
+            <img src="https://i.pinimg.com/originals/8b/78/a1/8b78a1be93f89fefc8eb4521749e8350.jpg" alt="" wight="350" height="300" class="float-left mr-3">
+            {% endif %}
+            <h5 class="card-title">{{ blog_item.title }}</h5>
+            <p class="card-text">{{ blog_item.content | safe | linebreaks }}</p>
+
+    </div>
+    <div class="card-footer text-muted">
+        {{ blog_item.creat_content|date:"Y-m-d H:i" }}
+    </div>
+</div>
+{% endblock %}

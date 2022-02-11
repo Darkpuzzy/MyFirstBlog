@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{ CountCategory.counter() }
+
+{% block title %} {{ title }} :: DarkBlog {% endblock %}
+
+{% block sidebar %}
+<div class="float-left">
+    {%  include 'inc/_sidebar.html' %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div style="float:right; margin-left:120px; margin-top:-171px">
+    {% for item in Blog %}
+    <div class="card mb-3">
+        <div class="card-header">
+            Категория: <a href="{{ item.category.get_absolute_url }}"> {{ item.category }}</a>
+        </div>
+        <div class="card-body">
+            <div class ="media">
+                {% if item.photo %}
+                <img src="{{ item.photo.url }}" alt="" wight="350" height="300" class="mr-3">
+                {% else %}
+                <img src="https://i.pinimg.com/originals/8b/78/a1/8b78a1be93f89fefc8eb4521749e8350.jpg" alt="" wight="350" height="300" class="mr-3">
+                {% endif %}
+                <div class ="media-body">
+                    <h5 class="card-title">{{ item.title }}</h5>
+                    <p class="card-text">{{ item.content |linebreaks|truncatewords:"60" }}</p>
+                    <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Читать далее...</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-muted">
+            {{ item.creat_content|date:"Y-m-d H:i" }}
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% endblock %}
