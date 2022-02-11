@@ -73,16 +73,16 @@ class CreateBlogPost(CreateView):
     template_name = 'api/add_blog.html'
 
 
-def counter():
-    counter_category = {}
-    cat_len = Category.objects.all()
-    for i in cat_len:
-        blogs = Blog.objects.filter(category=i.id)
-        objects = len(blogs)
-        i.quentity = int(objects)
-        i.save()
-        counter_category[f'{i}'] = int(objects)
-    return counter_category
+# def counter():
+#     counter_category = {}
+#     cat_len = Category.objects.all()
+#     for i in cat_len:
+#         blogs = Blog.objects.filter(category=i.id)
+#         objects = len(blogs)
+#         i.quentity = int(objects)
+#         i.save()
+#         counter_category[f'{i}'] = int(objects)
+#     return counter_category
 
 
 # def index(request):
