@@ -20,8 +20,8 @@ class HomeBlog(ListView):
         return context
 
 
-    # def get_queryset(self):
-        # return Blog.objects.filter() - задаем условие.
+    def get_queryset(self):
+        return Blog.objects.all().select_related('category')
 
 # class CountCategory():
 #     def counter(self):
@@ -51,10 +51,10 @@ class BlogCategory(ListView):
     template_name = 'api/home_blog_list.html'
     context_object_name = 'Blog'
     allow_empty = False
-
+    # queryset = Blog.objects.select_related('category')
 
     def get_queryset(self):
-        return Blog.objects.filter(category_id=self.kwargs['category_id'])
+        return Blog.objects.filter(category_id=self.kwargs['category_id']).select_related('category')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
