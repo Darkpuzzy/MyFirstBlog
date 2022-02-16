@@ -17,6 +17,7 @@ class BlogForm(forms.ModelForm):
             'title': forms.TextInput(attrs={"class": "form-control"}),
             'content': forms.Textarea(attrs={"class": "form-control", "rows":5}),
             'category': forms.Select(attrs={"class": "form-control"}),
+            'photo': forms.ImageField()
         }
 
     def clean_title(self):
