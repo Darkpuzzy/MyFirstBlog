@@ -5,12 +5,15 @@ from django.contrib.auth.models import User
 from .models import *
 from .forms import *
 from django.views.generic import ListView,DetailView,CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 
 
 class HomeBlog(ListView):
     model = Blog
     template_name = 'api/home_blog_list.html'
     context_object_name = 'Blog'
+    paginate_by = 4
     # extra_context = {'title': 'Главная'}
 
 
@@ -22,18 +25,6 @@ class HomeBlog(ListView):
 
     def get_queryset(self):
         return Blog.objects.all().select_related('category')
-
-# class CountCategory():
-#     def counter(self):
-#         counter_category = {}
-#         cat_len = Category.objects.all()
-#         for i in cat_len:
-#             blogs = Blog.objects.filter(category=i.id)
-#             objects = len(blogs)
-#             i.quentity = int(objects)
-#             i.save()
-#             counter_category[f'{i}'] = int(objects)
-#         return counter_category
 
 
 class UserList(generics.ListAPIView):
@@ -68,7 +59,8 @@ class ViewBlogPost(DetailView):
     # pk_url_kwarg = 'blog_id'
 
 
-class CreateBlogPost(CreateView):
+class CreateBlogPost(LoginRequiredMixin, CreateView):
+    login_url = '/admin/'
     form_class = BlogForm
     template_name = 'api/add_blog.html'
 
