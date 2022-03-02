@@ -42,6 +42,7 @@ class BlogCategory(ListView):
     template_name = 'api/home_blog_list.html'
     context_object_name = 'Blog'
     allow_empty = False
+    paginate_by = 4
     # queryset = Blog.objects.select_related('category')
 
     def get_queryset(self):
