@@ -4,9 +4,12 @@ from . import serializers
 from django.contrib.auth.models import User
 from .models import *
 from .forms import *
-from django.views.generic import ListView,DetailView,CreateView
+from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
+from django.contrib.auth import login,logout
+from django.contrib import messages
+
 
 
 class HomeBlog(ListView):
@@ -16,12 +19,10 @@ class HomeBlog(ListView):
     paginate_by = 4
     # extra_context = {'title': 'Главная'}
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная страница' # в html изменить заголовок и будет этот титл
         return context
-
 
     def get_queryset(self):
         return Blog.objects.all().select_related('category')
@@ -35,6 +36,19 @@ class UserList(generics.ListAPIView):
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
+
+
+def counter(request):
+    if request.method:
+        counter_category = {}
+        cat_len = Category.objects.all()
+        for i in cat_len:
+            blogs = Blog.objects.filter(category=i.id)
+            objects = len(blogs)
+            i.quentity = int(objects)
+            i.save()
+            counter_category[f'{i}'] = int(objects)
+        return render(request)
 
 
 class BlogCategory(ListView):
@@ -64,6 +78,39 @@ class CreateBlogPost(LoginRequiredMixin, CreateView):
     login_url = '/admin/'
     form_class = BlogForm
     template_name = 'api/add_blog.html'
+
+
+def register(request):
+    if request.method == "POST":
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Вы успешно зарегистрировались')
+            return redirect('login')
+        else:
+            messages.error(request, 'Ошибка регистрации')
+    else:
+        form = UserRegisterForm()
+    return render(request,'api/register.html', {'form': form})
+
+
+def user_login(request):
+    if request.method == 'POST':
+        form = UserLoginForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = UserLoginForm()
+    return render(request, 'api/login.html', {'form': form})
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('home')
+
 
 
 # def counter():

@@ -27,12 +27,16 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('api.urls')),
     # path('', index, name='home'),
+    path('', counter),
     path('blog/', HomeBlog.as_view(), name='home'),
     # path('categories/<int:category_id>/', get_category, name='category'),
     path('categories/<int:category_id>/', BlogCategory.as_view(), name='category'),
     # path('publication/<int:blog_id>/', view_blog, name='view_blogs'),
     path('publication/<int:pk>/', ViewBlogPost.as_view(), name='view_blogs'),
-    path('blog/add-blog', CreateBlogPost.as_view(), name='add_blog')
+    path('blog/add-blog', CreateBlogPost.as_view(), name='add_blog'),
+    path('register', register, name='register'),
+    path('login', user_login, name='login'),
+    path('logout', user_logout, name='logout'),
 ]
 
 if settings.DEBUG:
